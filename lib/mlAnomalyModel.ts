@@ -1,0 +1,4 @@
+export type HistoryPoint={amount:number;timestamp:string;category:string;status:string;payee?:string};
+export type AnomalyModel={mean:number;stdDev:number;hourMean:number;score:(amount:number,hour:number,isMerchant:boolean,isNewPayee:boolean)=>number};
+export function trainAnomalyModel(history:HistoryPoint[]):AnomalyModel{const values=history.map(x=>x.amount);const mean=values.reduce((a,b)=>a+b,0)/values.length;const stdDev=Math.sqrt(values.reduce((a,b)=>a+(b-mean)**2,0)/values.length)||1;const hourMean=history.reduce((a,x)=>a+new Date(x.timestamp).getHours(),0)/history.length;return {mean,stdDev,hourMean,score:(amount,hour,isMerchant,isNewPayee)=>Math.min(100,Math.round(Math.abs(amount-mean)/stdDev*20+Math.abs(hour-hourMean)*2+(isMerchant?0:8)+(isNewPayee?18:0)))}};
+export function bellCurve(mean:number,std:number){return Array.from({length:41},(_,i)=>{const x=mean-3*std+i*(6*std/40);return {x,y:Math.exp(-.5*((x-mean)/std)**2)}})};

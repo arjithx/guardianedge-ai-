@@ -1,0 +1,6 @@
+{
+  "/transfer/page": "app/transfer/page.js",
+  "/verify-context/page": "app/verify-context/page.js",
+  "/scan-qr/page": "app/scan-qr/page.js",
+  "/page": "app/page.js"
+}
